@@ -1,0 +1,19 @@
+# Core ML & Data Handling
+tensorflow
+pandas
+scikit-learn
+scikit-image
+Pillow
+
+# MLOps Tools
+dvc[gdrive]
+mlflow
+
+# API & Serving
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Explainability
+lime
+shap

@@ -1,0 +1,35 @@
+# --- Virtual Environment ---
+venv/
+.venv/
+env/
+ENV/
+
+# --- Python Cache ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- IDE / Editor-specific files ---
+.vscode/
+.idea/
+
+# --- DVC internal files ---
+.dvc/cache
+.dvc/tmp
+
+# --- Secrets and Credentials ---
+*.env
+secrets/
+creds.json
+key.json
+*.json # Be careful with this; if you have non-secret json files, list secret ones explicitly.
+
+# --- Build artifacts ---
+build/
+dist/
+*.egg-info/
+
+# --- Operating System files ---
+.DS_Store
+Thumbs.db
