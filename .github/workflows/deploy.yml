@@ -1,4 +1,4 @@
-name: Build and Deploy Google Cloud Run
+name: Build and Deploy to Google Cloud Run
 
 on:
   push:
@@ -25,15 +25,25 @@ jobs:
           python-version: '3.9'
 
       - name: Install DVC
-        run: pip install dvc[gdrive]
+        run: pip install "dvc[gdrive]"
 
       - name: Authenticate DVC with Google Drive
         run: |
+          # Create the directory if it doesn't exist
           mkdir -p ~/.config/dvc
-          echo "${{ secrets.GDRIVE_DVC_TOKEN }}" > ~/.config/dvc/gdrive-user-credentials.json
-      
+          # Write the credentials from the GitHub secret into the file
+          echo '${{ secrets.GDRIVE_CREDENTIALS_DATA }}' > ~/.config/dvc/gdrive-user-credentials.json
+          # --- Verification Step ---
+          echo "Verifying credentials file..."
+          if [ -s ~/.config/dvc/gdrive-user-credentials.json ]; then
+            echo "Credentials file created successfully."
+          else
+            echo "Error: Credentials file is empty or was not created."
+            exit 1
+          fi
+
       - name: Pull DVC data
-        run: dvc pull -v
+        run: dvc pull --force
 
       - name: Authenticate with Google Cloud
         uses: 'google-github-actions/auth@v2'
