@@ -27,20 +27,12 @@ jobs:
       - name: Install DVC
         run: pip install "dvc[gdrive]"
 
-      - name: Authenticate DVC with Google Drive
+      - name: Authenticate DVC with Google Service Account
         run: |
-          # Create the directory if it doesn't exist
-          mkdir -p ~/.config/dvc
-          # Write the credentials from the GitHub secret into the file
-          echo '${{ secrets.GDRIVE_CREDENTIALS_DATA }}' > ~/.config/dvc/gdrive-user-credentials.json
-          # --- Verification Step ---
-          echo "Verifying credentials file..."
-          if [ -s ~/.config/dvc/gdrive-user-credentials.json ]; then
-            echo "Credentials file created successfully."
-          else
-            echo "Error: Credentials file is empty or was not created."
-            exit 1
-          fi
+          echo '${{ secrets.GDRIVE_CREDENTIALS_DATA }}' > gcp-dvc-key.json
+          # Configure the DVC remote to use the service account key file
+          dvc remote modify myremote gdrive_use_service_account true
+          dvc remote modify myremote gdrive_service_account_json_file_path gcp-dvc-key.json
 
       - name: Pull DVC data
         run: dvc pull --force
