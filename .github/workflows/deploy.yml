@@ -19,6 +19,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install DVC
+        run: pip install dvc[gdrive]
+
+      - name: Authenticate DVC with Google Drive
+        run: |
+          mkdir -p ~/.config/dvc
+          echo "${{ secrets.GDRIVE_DVC_TOKEN }}" > ~/.config/dvc/gdrive-user-credentials.json
+      
+      - name: Pull DVC data
+        run: dvc pull -v
+
       - name: Authenticate with Google Cloud
         uses: 'google-github-actions/auth@v2'
         with:
