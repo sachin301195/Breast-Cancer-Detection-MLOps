@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import numpy as np
 import tensorflow as tf
@@ -7,6 +8,20 @@ import io
 import numpy as np
 
 app = FastAPI(title="Breast Cancer Histopathology Classifier API")
+
+origins = [
+    "http://localhost:3000",
+    # When you deploy your frontend, you'll add its URL here too
+    # e.g., "https://your-frontend-app.a.run.app" 
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"], # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"], # Allows all headers
+)
 
 try:
     model = keras.models.load_model('models/breast_cancer_classifier.keras')
