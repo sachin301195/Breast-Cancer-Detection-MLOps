@@ -4,3 +4,4 @@
     url = gdrive://1oMovulfhztsZIiH8YKLfZLhnyMDgKnFJ
     gdrive_use_service_account = true
     gdrive_service_account_json_file_path = /mnt/d/cv-cancer-4a019cf39bbc.json
+    jobs = 10
