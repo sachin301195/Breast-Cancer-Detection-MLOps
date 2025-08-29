@@ -1,16 +1,18 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from PIL import Image
+# from PIL import Image
 import numpy as np
 import tensorflow as tf
 import keras
-import io
-import numpy as np
+# import io
 
 app = FastAPI(title="Breast Cancer Histopathology Classifier API")
 
 origins = [
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
     # When you deploy your frontend, you'll add its URL here too
     # e.g., "https://your-frontend-app.a.run.app" 
 ]
@@ -32,17 +34,13 @@ except Exception as e:
 
 def preprocessing_image(image_bytes: bytes) -> np.ndarray:
     try:
-        image=Image.open(io.BytesIO(image_bytes))
-        if image.mode!='RGB':
-            image=image.convert('RGB')
-        
-        image=image.resize((224, 224))
-        image_array=np.array(image)
-        # preprocessed_array = keras.applications.resnet_v2.preprocess_input(image_array)
+        image = tf.image.decode_image(image_bytes, channels=3, expand_animations=False)
+        image = tf.image.resize(image, [224, 224])
+        image = tf.cast(image, tf.float32)
 
-        return np.expand_dims(image_array, axis=0)
+        return tf.expand_dims(image, axis=0)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f'Invalid image file: {e}')
+        raise HTTPException(status_code=400, detail=f'Invalid image file or processing error: {e}')
 
 @app.get("/")
 def health_check():
