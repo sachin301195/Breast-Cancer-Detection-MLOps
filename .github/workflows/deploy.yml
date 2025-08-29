@@ -35,7 +35,7 @@ jobs:
           dvc remote modify myremote gdrive_service_account_json_file_path gcp-dvc-key.json
 
       - name: Pull DVC data
-        run: dvc pull --force -vv
+        run: dvc pull models/ --force -vv
 
       - name: Authenticate with Google Cloud
         uses: 'google-github-actions/auth@v2'
