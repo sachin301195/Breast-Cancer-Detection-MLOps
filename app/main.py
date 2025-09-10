@@ -36,9 +36,9 @@ def preprocessing_image(image_bytes: bytes) -> np.ndarray:
     try:
         image = tf.image.decode_image(image_bytes, channels=3, expand_animations=False)
         image = tf.image.resize(image, [224, 224])
-        image = tf.cast(image, tf.float32)
+        image_batch = tf.expand_dims(image, axis=0)
 
-        return tf.expand_dims(image, axis=0)
+        return tf.keras.applications.resnet_v2.preprocess_input(image_batch)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f'Invalid image file or processing error: {e}')
 
