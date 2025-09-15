@@ -17,3 +17,7 @@ python-multipart
 # Explainability
 lime
 shap
+
+# Data Resampling & Augmentation
+imbalanced-learn
+staintools
