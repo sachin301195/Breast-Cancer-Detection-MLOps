@@ -37,4 +37,3 @@ Thumbs.db
 # --- MLflow local files ---
 mlruns/
 mlartifacts/
-/models
