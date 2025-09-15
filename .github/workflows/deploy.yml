@@ -18,6 +18,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          lfs: true # Ensure Git LFS files are pulled
+
+      - name: Verify Model Download
+        run: |
+          echo "Verifying contents of the 'models' directory after LFS checkout:"
+          ls -lh models/
 
       - name: Authenticate with Google Cloud
         uses: 'google-github-actions/auth@v2'
