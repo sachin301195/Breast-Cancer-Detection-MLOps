@@ -16,17 +16,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository (Full & Clean)
         uses: actions/checkout@v4
         with:
           lfs: true
+          fetch-depth: 0
 
-      # --- THIS IS THE CRITICAL DIAGNOSTIC STEP ---
-      - name: List all files in workspace (Ground Truth)
+      # --- THIS IS THE FINAL FIX AND DIAGNOSTIC ---
+      - name: "Fix: Ensure requirements-prod.txt is visible to Docker"
         run: |
-          echo "--- Verifying repository file structure ---"
-          # This 'ls -laR' command will list every single file and folder, recursively.
-          ls -laR
+          echo "--- Current .dockerignore contents ---"
+          cat .dockerignore || echo ".dockerignore not found. Creating one."
+          echo ""
+          echo "--- Adding explicit rule to allow requirements-prod.txt ---"
+          # This command adds a line to the .dockerignore file that says
+          # "Do NOT ignore this file", overriding any other rules.
+          echo "!requirements-prod.txt" >> .dockerignore
+          echo "--- New .dockerignore contents ---"
+          cat .dockerignore
 
       - name: Authenticate with Google Cloud
         uses: 'google-github-actions/auth@v2'
