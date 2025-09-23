@@ -19,12 +19,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          lfs: true # Ensure Git LFS files are pulled
+          lfs: true
 
-      - name: Verify Model Download
+      # --- THIS IS THE CRITICAL DIAGNOSTIC STEP ---
+      - name: List all files in workspace (Ground Truth)
         run: |
-          echo "Verifying contents of the 'models' directory after LFS checkout:"
-          ls -lh models/
+          echo "--- Verifying repository file structure ---"
+          # This 'ls -laR' command will list every single file and folder, recursively.
+          ls -laR
 
       - name: Authenticate with Google Cloud
         uses: 'google-github-actions/auth@v2'
@@ -50,3 +52,4 @@ jobs:
             --region=${{ env.REGION }} \
             --memory=2Gi \
             --allow-unauthenticated
+
